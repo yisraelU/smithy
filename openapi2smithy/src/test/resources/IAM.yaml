@@ -1,0 +1,839 @@
+openapi: 3.0.0
+info:
+  title: IAM HTTP API
+  description: API for management policies, groups and users
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/ShagaleevAlexey/IAM/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: users
+  description: Users
+- name: policies
+  description: Policies
+- name: groups
+  description: Groups
+paths:
+  /policies/:
+    post:
+      tags:
+      - policies
+      summary: Add new policy
+      description: Add new policy
+      operationId: addPolicy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddPolicy'
+        required: true
+      responses:
+        201:
+          description: User added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePolicy'
+        409:
+          description: User is exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /policies/{id}:
+    get:
+      tags:
+      - policies
+      summary: Get policy
+      description: Get policy by ID
+      operationId: getPolicy
+      parameters:
+      - name: id
+        in: path
+        description: The policy ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Policy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePolicy'
+        404:
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    put:
+      tags:
+      - policies
+      summary: Update policy
+      description: Update policy by ID
+      operationId: updatePolicy
+      parameters:
+      - name: id
+        in: path
+        description: The policy ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddPolicy'
+        required: true
+      responses:
+        200:
+          description: Policy updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePolicy'
+        404:
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    delete:
+      tags:
+      - policies
+      summary: Delete policy
+      description: Delete policy by ID
+      operationId: deletePolicy
+      parameters:
+      - name: id
+        in: path
+        description: The policy ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Policy deleted
+        404:
+          description: Policy not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /policies/list/:
+    post:
+      tags:
+      - policies
+      summary: Get policies
+      description: Get policies by filter
+      operationId: listPolicies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestGetPoliciesList'
+        required: true
+      responses:
+        200:
+          description: Policies list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePoliciesList'
+  /groups/:
+    post:
+      tags:
+      - groups
+      summary: Add new group
+      description: Add new group
+      operationId: addGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddGroup'
+        required: true
+      responses:
+        201:
+          description: Group added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGroup'
+        409:
+          description: Group is exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /groups/{id}:
+    get:
+      tags:
+      - groups
+      summary: Get group
+      description: Get group by ID
+      operationId: getGroup
+      parameters:
+      - name: id
+        in: path
+        description: The group ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: Group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGroup'
+        404:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    put:
+      tags:
+      - groups
+      summary: Update group
+      description: Update group by ID
+      operationId: updateGroup
+      parameters:
+      - name: id
+        in: path
+        description: The group ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddGroup'
+        required: true
+      responses:
+        200:
+          description: Group updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGroup'
+        404:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+        409:
+          description: Group is exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    delete:
+      tags:
+      - groups
+      summary: Delete group
+      description: Delete group by ID
+      operationId: deleteGroup
+      parameters:
+      - name: id
+        in: path
+        description: The group ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        404:
+          description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /groups/list/:
+    post:
+      tags:
+      - groups
+      summary: Get groups
+      description: Get groups by filter
+      operationId: listGroups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestGetGroupsList'
+        required: true
+      responses:
+        200:
+          description: Groups list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGroupsList'
+  /users/:
+    post:
+      tags:
+      - users
+      summary: Add new user
+      description: Add new user
+      operationId: addUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddUser'
+        required: true
+      responses:
+        201:
+          description: User added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        409:
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+  /users/{id}:
+    get:
+      tags:
+      - users
+      summary: Get user
+      description: Get user by ID
+      operationId: getUser
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    put:
+      tags:
+      - users
+      summary: Update user
+      description: Update user by ID
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAddUser'
+        required: true
+      responses:
+        200:
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+        409:
+          description: User is exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    delete:
+      tags:
+      - users
+      summary: Delete user
+      description: Delete user by ID
+      operationId: deleteUser
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: User deleted
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /users/list/:
+    post:
+      tags:
+      - users
+      summary: Get users
+      description: Get users by filter
+      operationId: listUsers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestGetUsersList'
+        required: true
+      responses:
+        200:
+          description: Users list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUsersList'
+  /users/{id}/bind:
+    put:
+      tags:
+      - users
+      summary: Update binding policies or groups
+      description: Update binding policies or groups to user
+      operationId: updateBindings
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUpdateBindingPolicy'
+        required: true
+      responses:
+        200:
+          description: Bind updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        404:
+          description: User or policies or groups not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+    post:
+      tags:
+      - users
+      summary: Bind policies or groups
+      description: Bind policies or groups to user
+      operationId: addBindings
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBindPolicy'
+        required: true
+      responses:
+        200:
+          description: Bind success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        404:
+          description: User or policies or groups not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+  /users/{id}/unbind:
+    post:
+      tags:
+      - users
+      summary: Unbind policies or groups
+      description: Unbind policies or groups to user
+      operationId: removeBindings
+      parameters:
+      - name: id
+        in: path
+        description: The user ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUnbindPolicy'
+        required: true
+      responses:
+        200:
+          description: Unbind success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseUser'
+        404:
+          description: User or policies or groups not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseError'
+components:
+  schemas:
+    RequestAddPolicy:
+      required:
+      - name
+      - statements
+      properties:
+        id:
+          type: string
+          description: ID of policy, by default generate new UUID
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: UsersReadOnly
+        description:
+          type: string
+          example: Provides read only access to Users.
+        version:
+          type: string
+          example: "1.0"
+        statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/RequestStatement'
+    RequestGetPoliciesList:
+      properties:
+        uid:
+          type: string
+          description: ID of policy
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: UsersReadOnly
+        version:
+          type: string
+          example: "1.0"
+    RequestAddGroup:
+      required:
+      - name
+      - policies
+      properties:
+        id:
+          type: string
+          description: ID of group, by default generate new UUID
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: AdminFullAccess
+        description:
+          type: string
+          example: Provides full access for group users
+        policies:
+          type: array
+          items:
+            type: string
+            format: uuid
+    RequestGetGroupsList:
+      properties:
+        uid:
+          type: string
+          description: ID of group
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: AdminFullAccess
+    RequestAddUser:
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          description: ID of user, by default generate new UUID
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+    RequestGetUsersList:
+      properties:
+        uid:
+          type: string
+          description: ID of user
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        groups:
+          type: array
+          description: List of groups ID
+          items:
+            type: string
+            format: uuid
+        policies:
+          type: array
+          description: List of policies ID
+          items:
+            type: string
+            format: uuid
+    RequestBindPolicy:
+      properties:
+        policies_ids:
+          type: array
+          items:
+            type: string
+            description: ID of policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        groups_ids:
+          type: array
+          items:
+            type: string
+            description: ID of group policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+    RequestUnbindPolicy:
+      properties:
+        policies_ids:
+          type: array
+          items:
+            type: string
+            description: ID of policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        groups_ids:
+          type: array
+          items:
+            type: string
+            description: ID of group policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+    RequestUpdateBindingPolicy:
+      properties:
+        policies_ids:
+          type: array
+          items:
+            type: string
+            description: ID of policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        groups_ids:
+          type: array
+          items:
+            type: string
+            description: ID of group policy
+            format: uuid
+            example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+    RequestStatement:
+      required:
+      - actions
+      - effect
+      properties:
+        effect:
+          type: string
+          enum:
+          - allow
+          - deny
+        actions:
+          type: array
+          items:
+            type: string
+            example: users:GetInfo
+    ResponseStatement:
+      required:
+      - actions
+      - effect
+      properties:
+        effect:
+          type: string
+          enum:
+          - allow
+          - deny
+        actions:
+          type: array
+          items:
+            type: string
+            example: users:GetInfo
+    ResponsePolicy:
+      required:
+      - id
+      - name
+      - statements
+      properties:
+        id:
+          type: string
+          description: ID of product, by default generate new UUID
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: UsersReadOnly
+        description:
+          type: string
+          example: Provides read only access
+        statements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseStatement'
+    ResponsePoliciesList:
+      required:
+      - pagination
+      - policies
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponsePolicy'
+        pagination:
+          $ref: '#/components/schemas/ResponsePagination'
+    ResponseGroup:
+      required:
+      - id
+      - name
+      - policies
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        name:
+          type: string
+          example: AdminFullAccess
+        description:
+          type: string
+          example: Provides full access for group users
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponsePolicy'
+    ResponseGroupsList:
+      required:
+      - groups
+      - pagination
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseGroup'
+        pagination:
+          $ref: '#/components/schemas/ResponsePagination'
+    ResponseUser:
+      required:
+      - groups
+      - id
+      - policies
+      properties:
+        id:
+          type: string
+          description: ID of user, generated by UUID
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseGroup'
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponsePolicy'
+    ResponseUsersList:
+      required:
+      - pagination
+      - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseUser'
+        pagination:
+          $ref: '#/components/schemas/ResponsePagination'
+    ResponsePagination:
+      required:
+      - afterId
+      - limit
+      - total
+      properties:
+        total:
+          type: integer
+          example: 132
+        afterId:
+          type: string
+          format: uuid
+          example: 19fe74c2-f91a-450f-a4a5-c0390994fd37
+        limit:
+          type: integer
+          example: 10
+    ResponseError:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          example: 10001
+        message:
+          type: string
+          example: Text of internal error

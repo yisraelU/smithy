@@ -1,0 +1,342 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  license:
+    name: MIT
+servers:
+  - url: http://petstore.swagger.io/v1
+paths:
+  /pets:
+    get:
+      summary: List all pets
+      operationId: listPets
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: An paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pets"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a pet
+      operationId: createPets
+      tags:
+        - pets
+      responses:
+        201:
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /pets/{petId}:
+    get:
+      summary: Info for a specific pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pets"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    StringTypeSchemaExample:
+      type: string
+    StringTypeDateFormatSchemaExample:
+      type: string
+      format: date
+    StringTypeDateTimeFormatSchemaExample:
+      type: string
+      format: date-time
+    StringTypePasswordFormatSchemaExample:
+      type: string
+      format: password
+    StringTypeByteFormatSchemaExample:
+      type: string
+      format: byte
+    StringTypeBinaryFormatSchemaExample:
+      type: string
+      format: binary
+    StringTypeEmailFormatSchemaExample:
+      type: string
+      format: email
+    StringTypeUUIDFormatSchemaExample:
+      type: string
+      format: uuid
+    StringTypeURIFormatSchemaExample:
+      type: string
+      format: uri
+    StringTypeHostnameFormatSchemaExample:
+      type: string
+      format: hostname
+    StringTypeIPV4FormatSchemaExample:
+      type: string
+      format: ipv4
+    StringTypeIPV6FormatSchemaExample:
+      type: string
+      format: ipv6
+    StringTypePatternSchemaExample:
+      type: string
+      pattern: '^\d{3}-\d{2}-\d{4}$'
+      description: "SSN Pattern"
+    StringTypeSchemaEnumExample:
+      type: string
+      description: pet status in the store
+    NumberTypeSchemaExample:
+      type: number
+    NumberTypeFloatFormatSchemaExample:
+      type: number
+      format: float
+    NumberTypeDoubleFormatSchemaExample:
+      type: number
+      format: double
+    IntegerTypeSchemaExample:
+      type: integer
+    IntegerInt32FormatTypeSchemaExample:
+      type: integer
+      format: int32
+    IntegerTypeInt64FormatSchemaExample:
+      type: integer
+      format: int64
+    BooleanTypeSchemaExample:
+      type: boolean
+    ArrayTypeItemsTypeIntegerSchemaExample:
+      type: array
+      items:
+        type: integer
+    ArrayTypeItemsTypeArrayItemsTypeIntegerSchemaExample:
+      type: array
+      items:
+        type: array
+        items:
+          type: integer
+      #description: "Nested Integer Arrays"
+    ArrayTypeItemsTypeObjectSchemaExample:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+    ArrayTypeItemsTypeRefSchemaExample:
+      type: array
+      items:
+        $ref: '#/components/schemas/ObjectSchemaExample'
+    ArrayTypeArbitraryItemsSchemaExample:
+      type: array
+      items: {}
+      description: " \"hello\", -2, true, [5.7], {\"id\": 5} ]"
+    ArrayTypeUniqueItemsSchemaExample:
+      type: array
+      items:
+        type: integer
+      uniqueItems: true
+    ArrayTypeItemsTypeNoneSchemaExample:
+      type: array
+      items:
+        properties:
+          id:
+            type: string
+    ObjectSchemaExample:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    ObjectSchemaPropertyRefExample:
+      type: object
+      required:
+        - name
+      properties:
+        foo:
+          type: string
+        baz:
+          $ref: '#/components/schemas/ObjectSchemaExample'
+        bar:
+          type: integer
+          format: int32
+    ObjectSchemaWithoutTypeExample:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    ObjectSchemaInlineObjectTypeExample:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        inlineObj:
+          type: object
+          properties:
+            foo:
+              type: string
+    #Composition Examples with allOf
+    ErrorModel:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+    ExtendedErrorModel:
+      allOf:
+        - $ref: '#/components/schemas/ErrorModel'
+        - type: object
+          required:
+            - rootCause
+          properties:
+            rootCause:
+              type: string
+    ObjectSchemaAllMemberExample:
+      properties:
+        member1:
+          type: string
+        member2:
+          type: string
+          format: date
+        member3:
+          type: string
+          format: date-time
+        member4:
+          type: string
+          format: password
+        member5:
+          type: string
+          format: byte
+        member6:
+          type: string
+          format: binary
+        member7:
+          type: string
+          format: email
+        member8:
+          type: string
+          format: uuid
+        member9:
+          type: string
+          format: uri
+        member10:
+          type: string
+          format: hostname
+        member11:
+          type: string
+          format: ipv6
+        member12:
+          type: number
+        member13:
+          type: number
+          format: float
+        member14:
+          type: number
+          format: double
+        member15:
+          type: integer
+        member16:
+          type: integer
+          format: int32
+        member17:
+          type: integer
+          format: int64
+        member18:
+          type: boolean
+    IntegerSchemaWithRange:
+      type: integer
+      minimum: 1
+      maximum: 20
+    ObjectSchemaRequiredExample:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          minLength: 3
+          maxLength: 20
+        age:
+          type: integer
+          minimum: 0
+    Pet:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Pets:
+      type: array
+      items:
+        $ref: "#/components/schemas/Pet"
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer

@@ -12,6 +12,7 @@ include(":smithy-mqtt-traits")
 include(":smithy-jsonschema")
 include(":smithy-openapi")
 include(":smithy-utils")
+include(":openapi2smithy")
 
 project(":smithy-aws-traits").projectDir = file("aws/smithy-aws-traits")
 project(":smithy-aws-apigateway-openapi").projectDir = file("aws/smithy-aws-apigateway-openapi")
