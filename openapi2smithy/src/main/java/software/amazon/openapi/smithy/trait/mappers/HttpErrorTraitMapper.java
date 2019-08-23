@@ -15,7 +15,7 @@
 
 package software.amazon.openapi.smithy.trait.mappers;
 
-import io.swagger.models.Response;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import java.util.Map;
 import java.util.Optional;
 import software.amazon.openapi.smithy.Context;
@@ -28,10 +28,9 @@ public final class HttpErrorTraitMapper implements OpenApi2SmithyTraitMapper {
     @Override
     public Shape applyTrait(Shape shape, Object object, Context context) {
         return Optional.ofNullable(object).filter(Map.Entry.class::isInstance).map(Map.Entry.class::cast)
-                .filter(entry -> entry.getValue() instanceof Response)
+                .filter(entry -> entry.getValue() instanceof ApiResponse)
                 .map(entry -> entry.getKey().toString()).filter(statusCode -> !statusCode.equals("default"))
-                .map(Integer::parseInt).map(HttpErrorTrait::new)
+                .map(Integer::parseInt).filter(statusCode -> statusCode >= 300).map(HttpErrorTrait::new)
                 .map(trait -> applyTraitToShape(shape, trait)).orElse(shape);
     }
-
 }

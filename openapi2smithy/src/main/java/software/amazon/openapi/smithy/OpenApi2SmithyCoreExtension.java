@@ -61,7 +61,6 @@ public class OpenApi2SmithyCoreExtension implements OpenApi2SmithyExtension {
         //TODO: Get all classes using service loader which implement OpenApi2SmithyTraitMapper interface
         return ListUtils.of(
                 new AuthTraitMapper(),
-                new HttpTraitMapper(),
                 new CollectionTraitMapper(),
                 new DeprecatedTraitMapper(),
                 new DocumentationTraitMapper(),
@@ -74,6 +73,7 @@ public class OpenApi2SmithyCoreExtension implements OpenApi2SmithyExtension {
                 new HttpLabelTraitMapper(),
                 new HttpPayloadTraitMapper(),
                 new HttpQueryTraitMapper(),
+                new HttpTraitMapper(),
                 new IdempotentTraitMapper(),
                 new LengthTraitMapper(),
                 new PatternTraitMapper(),

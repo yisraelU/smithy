@@ -10,10 +10,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import software.amazon.openapi.smithy.Context;
-import software.amazon.openapi.smithy.OpenApi2SmithyCoreExtension;
-import software.amazon.openapi.smithy.OpenApi2SmithyMapper;
-import software.amazon.openapi.smithy.SmithyModelGenerator;
 import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.shapes.LongShape;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -23,11 +19,8 @@ import software.amazon.smithy.model.shapes.ShapeIndex;
 import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.traits.BoxTrait;
 import software.amazon.smithy.model.traits.LengthTrait;
-import software.amazon.smithy.model.traits.Protocol;
-import software.amazon.smithy.model.traits.ProtocolsTrait;
 import software.amazon.smithy.model.traits.RangeTrait;
 import software.amazon.smithy.model.traits.RequiredTrait;
-import software.amazon.smithy.model.traits.Trait;
 
 class TraitMappersTest {
 

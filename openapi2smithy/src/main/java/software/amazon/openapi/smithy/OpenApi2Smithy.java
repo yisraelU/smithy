@@ -63,7 +63,8 @@ public class OpenApi2Smithy implements SmithyBuildPlugin {
         OpenAPI openApi = new OpenAPIV3Parser().read(openApiServiceFilePath.toAbsolutePath().toString());
         Model model = converter.convert(openApi);
 
-        context.getFileManifest().writeJson("model.json", ModelSerializer.builder().build().serialize(model));
+        context.getFileManifest().writeJson(context.getSettings().getStringMap().get("service.name") + ".json",
+                ModelSerializer.builder().build().serialize(model));
     }
 
     private void updateFileManifest(PluginContext context) {
