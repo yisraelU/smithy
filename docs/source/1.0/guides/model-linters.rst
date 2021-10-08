@@ -128,6 +128,68 @@ Example:
     ]
 
 
+.. _NoninclusiveTerms:
+
+NoninclusiveTerms
+=================
+
+Validates that all text content in a model (i.e. shape names, member names,
+documentation, trait values, etc.) do not contain words that perpetuate cultural
+biases. This validator has a built-in set of bias terms that are commonly found
+in APIs along with suggested alternatives.
+
+Noninclusive terms are case-insensitively substring matched and can have any
+number of leading or trailing whitespace or non-whitespace characters.
+
+Rationale
+    Intent doesn't always match impact. The use of noninclusive language like
+    "whitelist" and "blacklist" perpetuates bias through past association of
+    acceptance and denial based on skin color. Other words should be used that
+    are not only inclusive, but more clearly communicate meaning. Words like
+    allowList and denyList much more clearly indicate that something is
+    allowed or denied.
+
+Default severity
+    ``WARNING``
+
+Configuration
+    .. list-table::
+       :header-rows: 1
+       :widths: 20 20 60
+
+       * - Property
+         - Type
+         - Description
+       * - noninclusiveTerms
+         - { ``keyword`` -> [ ``alternatives`` ] }
+         - A set of mappings from noninclusive terms to match in the model text
+           to suggested alternatives for those terms to be used by the validator.
+           If a match occurs and alternatives is empty, no suggestion is made in
+           the generated warning message.
+       * - appendDefaults
+         - ``boolean``
+         - If set to true the mappings provided in the configuration should be
+           appended to the validator's builtin term to alternatives mappings.
+           Otherwise, the configured mappings will override the default.
+
+Example:
+
+.. code-block:: smithy
+
+    $version: "1.0"
+
+    metadata validators = [{
+        name: "InclusiveWords"
+        configuration: {
+            appendDefaults: true,
+            noninclusiveTerms: {
+                mankind: ["humankind"],
+                mailman: ["mail carrier", "postal worker"]
+            }
+        }
+    }]
+
+
 .. _ReservedWords:
 
 ReservedWords
