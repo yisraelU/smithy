@@ -27,6 +27,12 @@ import software.amazon.smithy.utils.SmithyUnstableApi;
  * formatted imports that can be written as code to a file. Other methods
  * can, and should, be added to make working with language specific imports
  * easier too.
+ *
+ * <p>"namespace" in the context of this interface can mean whatever it needs
+ * to mean for the target programming language. In some languages, it might
+ * mean the path to a file. In others, it might mean a proper namespace string.
+ * It's up to subclasses to both track a current "namespace" and implement
+ * this method in a way that makes sense.
  */
 @SmithyUnstableApi
 public interface ImportContainer {
@@ -35,16 +41,21 @@ public interface ImportContainer {
      * provided Symbol differs from the "namespace" associated with the
      * ImportContainer.
      *
-     * <p>"namespace" in this context can mean whatever it needs to mean for the
-     * target programming language. In some languages, it might mean the path to
-     * a file. In others, it might mean a proper namespace string. It's up to
-     * subclasses to both track a current "namespace" and implement this method
-     * in a way that makes sense.
-     *
      * @param symbol Symbol to import if it's in another namespace.
      * @param alias  Alias to import the symbol as.
      */
     void importSymbol(Symbol symbol, String alias);
+
+    /**
+     * Adds an import for the given symbol if and only if the "namespace" of the
+     * provided Symbol differs from the "namespace" associated with the
+     * ImportContainer.
+     *
+     * @param symbol Symbol to import if it's in another namespace.
+     */
+    default void importSymbol(Symbol symbol) {
+        importSymbol(symbol, symbol.getName());
+    }
 
     /**
      * Implementations must implement a custom {@code toString} method that
