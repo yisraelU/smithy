@@ -32,7 +32,9 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.traits.ReferencesTrait;
 import software.amazon.smithy.model.traits.Trait;
 import software.amazon.smithy.model.validation.validators.TraitValueValidator;
+import software.amazon.smithy.utils.SmithyUnstableApi;
 
+@SmithyUnstableApi
 public final class TextIndex implements KnowledgeIndex {
     private List<TextInstance> textInstanceList;
 
@@ -74,11 +76,7 @@ public final class TextIndex implements KnowledgeIndex {
         TextInstance.Builder builder = TextInstance.builder()
                 .locationType(TextInstance.TextLocation.SHAPE)
                 .shape(shape);
-        if (shape.isMemberShape()) {
-            builder.text(((MemberShape) shape).getMemberName());
-        } else {
-            builder.text(shape.getId().getName());
-        }
+        builder.text(shape.getId().getMember().orElseGet(() -> shape.getId().getName()));
         textInstances.add(builder.build());
 
         for (Trait trait : shape.getAllTraits().values()) {

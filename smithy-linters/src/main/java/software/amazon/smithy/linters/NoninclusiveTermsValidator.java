@@ -15,6 +15,7 @@
 
 package software.amazon.smithy.linters;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -22,10 +23,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.SourceLocation;
+import software.amazon.smithy.model.knowledge.TextIndex;
 import software.amazon.smithy.model.knowledge.TextInstance;
 import software.amazon.smithy.model.node.NodeMapper;
 import software.amazon.smithy.model.traits.Trait;
+import software.amazon.smithy.model.validation.AbstractValidator;
 import software.amazon.smithy.model.validation.Severity;
 import software.amazon.smithy.model.validation.ValidationEvent;
 import software.amazon.smithy.model.validation.ValidationUtils;
@@ -39,7 +43,7 @@ import software.amazon.smithy.utils.StringUtils;
  * *
  * <p>See AbstractModelTextValidator for scan implementation details.
  */
-public final class NoninclusiveTermsValidator extends AbstractModelTextValidator {
+public final class NoninclusiveTermsValidator extends AbstractValidator {
     static final Map<String, List<String>> BUILT_IN_NONINCLUSIVE_TERMS = MapUtils.of(
             "master", ListUtils.of("primary", "parent", "main"),
             "slave", ListUtils.of("secondary", "replica", "clone", "child"),
@@ -94,7 +98,36 @@ public final class NoninclusiveTermsValidator extends AbstractModelTextValidator
         }
     }
 
+    /**
+     * Runs a full text scan on a given model and stores the resulting TextOccurrences objects.
+     *
+     * Namespaces are checked against a global set per model.
+     *
+     * @param model Model to validate.
+     * @return a list of ValidationEvents found by the implementer of getValidationEvents per the
+     *          TextOccurrences provided by this traversal.
+     */
     @Override
+    public List<ValidationEvent> validate(Model model) {
+        TextIndex textIndex = TextIndex.of(model);
+        List<ValidationEvent> validationEvents = new ArrayList<>();
+        for (TextInstance text : textIndex.getTextInstances()) {
+            getValidationEvents(text, validationEvent -> {
+                validationEvents.add(validationEvent);
+            });
+        }
+        return validationEvents;
+    }
+
+    /**
+     * Sub-classes must implement this method to perform the following:
+     *   1) Decide if the text instance is at a relevant location to validate.
+     *   2) Analyze the text for whatever validation event it may or may not publish.
+     *   3) Produce a validation event, if necessary, and push it to the ValidationEvent consumer
+     *
+     * @param occurrence text occurrence found in the body of the model
+     * @param validationEventConsumer consumer to push ValidationEvents into
+     */
     protected void getValidationEvents(TextInstance instance,
                                        Consumer<ValidationEvent> validationEventConsumer) {
         for (Map.Entry<String, List<String>> termEntry : termsMap.entrySet()) {

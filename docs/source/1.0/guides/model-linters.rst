@@ -179,7 +179,7 @@ Example:
     $version: "1.0"
 
     metadata validators = [{
-        name: "InclusiveWords"
+        name: "NoninclusiveTerms"
         configuration: {
             appendDefaults: true,
             noninclusiveTerms: {
