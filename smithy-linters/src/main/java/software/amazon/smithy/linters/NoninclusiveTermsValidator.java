@@ -62,7 +62,7 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
     }
 
     /**
-     * InclusiveTermsValidator validator configuration.
+     * NoninclusiveTermsValidator configuration.
      */
     public static final class Config {
         private Map<String, List<String>> noninclusiveTerms = MapUtils.of();
@@ -120,15 +120,13 @@ public final class NoninclusiveTermsValidator extends AbstractValidator {
     }
 
     /**
-     * Sub-classes must implement this method to perform the following:
-     *   1) Decide if the text instance is at a relevant location to validate.
-     *   2) Analyze the text for whatever validation event it may or may not publish.
-     *   3) Produce a validation event, if necessary, and push it to the ValidationEvent consumer
-     *
+     * This is a somewhat abstracted interface for validating text instances in a model
+     * by pushing ValidationEvents into a provided consumer.
+*
      * @param occurrence text occurrence found in the body of the model
      * @param validationEventConsumer consumer to push ValidationEvents into
      */
-    protected void getValidationEvents(TextInstance instance,
+    private void getValidationEvents(TextInstance instance,
                                        Consumer<ValidationEvent> validationEventConsumer) {
         for (Map.Entry<String, List<String>> termEntry : termsMap.entrySet()) {
             //lower casing the term will be more necessary when the terms are from config
